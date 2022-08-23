@@ -1,1 +1,0 @@
-print('golang is my love')
