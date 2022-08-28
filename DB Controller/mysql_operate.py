@@ -4,7 +4,7 @@
 Project   : gitCode
 FileName  : mysql_operate.py
 IDE       : PyCharm
-CreateTime: 2022-08-20 21:29:00
+CreateTime: 2022-08-19 21:29:00
 '''
 
 import pymysql
