@@ -10,6 +10,9 @@ CreateTime: 2022-08-18 21:29:00
 import json
 import sys
 from typing import Callable
+from random import randint
+from threading import Thread
+from time import time, sleep
 
 
 # 用户类
@@ -264,7 +267,6 @@ class TaSex:
 
 
 # __call__: 使得类实例对象可以像普通函数那样被调用
-
 class CallClass(object):
 
     def __init__(self, name: str) -> None:
@@ -276,6 +278,45 @@ class CallClass(object):
         print(kwargs)
 
 
+# 多线程
+class ThreadClass(Thread):
+    __NUMBER = 0
+    __SECONDS = 0
+
+    def __init__(self, filename):
+        super(ThreadClass, self).__init__()
+        self.filename = filename
+
+    @classmethod
+    def add_number(cls):
+        cls.__NUMBER += 1
+        return cls.__NUMBER
+
+    @classmethod
+    def sum_seconds(cls, seconds):
+        cls.__SECONDS += seconds
+        return cls.__SECONDS
+
+    def run(self) -> None:
+        print(f'第{self.add_number()}个文件开始下载 {self.filename}')
+        down_time = randint(5, 10)
+        self.sum_seconds(down_time)
+        sleep(down_time)
+        print('%s 下载完成, 耗费了 %d 秒:' % (self.filename, down_time))
+
+
+def run_thread():
+    start = time()
+    p1 = ThreadClass('小吴记仇本.pdf')
+    p2 = ThreadClass('葵花宝典.pdf')
+    p1.start()
+    p2.start()
+    p1.join()
+    p2.join()
+    end = time()
+    print('总共耗时了 %.2f 秒 << 单线程所需耗时 %.2f 秒' % ((end - start), p2._ThreadClass__SECONDS))
+
+
 if __name__ == '__main__':
     # 实例化对象
     opts = ChildClass()
@@ -285,7 +326,7 @@ if __name__ == '__main__':
     # todo
     while True:
         selectNum = (lambda inp: int(inp) if inp.isdigit() else 0)(
-            input('「1.新增 2.删除 3.更新 4.查询ALL 5.查询one 6.中止 7.类内部 8.封装 9.多态 10.call 11.魔法函数 」_'))
+            input('「1.新增 2.删除 3.更新 4.查询ALL 5.查询one 6.中止 7.类内部 8.封装 9.多态 10.call 11.魔法函数 12.多线程」_'))
 
         if selectNum == 1:
             print('1. 新增用户')
@@ -340,3 +381,7 @@ if __name__ == '__main__':
             print('11.5. __del__: https://www.cnblogs.com/poloyy/p/15192098.html')
             print('11.6. __call__: https://www.cnblogs.com/poloyy/p/15253366.html')
             print('11.7. 全部魔法函数教程: https://www.cnblogs.com/poloyy/p/15245172.html')
+
+        elif selectNum == 12:
+            print('12. 多线程')
+            run_thread()

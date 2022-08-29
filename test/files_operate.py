@@ -23,3 +23,6 @@ for dirpath, dirnames, filenames in os.walk(path):
 
 
 print(os.sep)
+
+print([i+j for i in ['a', 'b', 'c'] for j in ['A', 'B', 'C']])
+print([i if i&1 else 0 for i in range(12)])
