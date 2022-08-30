@@ -381,7 +381,6 @@ if __name__ == '__main__':
             print('11.5. __del__: https://www.cnblogs.com/poloyy/p/15192098.html')
             print('11.6. __call__: https://www.cnblogs.com/poloyy/p/15253366.html')
             print('11.7. 全部魔法函数教程: https://www.cnblogs.com/poloyy/p/15245172.html')
-
         elif selectNum == 12:
             print('12. 多线程')
             run_thread()

@@ -8,7 +8,7 @@ CreateTime: 2022-08-28 22:02:57
 '''
 import os
 
-with open('../test/script.txt', 'a+', encoding='utf-8', errors='ignore') as f:
+with open('/script.txt', 'a+', encoding='utf-8', errors='ignore') as f:
     # f.write('我爱世界, 更爱中国')
     # f.writelines('新的一行')
     print(f.read())

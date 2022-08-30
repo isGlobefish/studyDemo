@@ -13,7 +13,7 @@ import pymysql
 class OperateDBClass(object):
 
     def __init__(self, host: str = 'localhost', port: int = 3306, username: str = 'root', password: str = '123456', database: str = None,
-                 charset: str = 'utf-8') -> None:
+                 charset: str = 'utf8') -> None:
         self._host = host
         self._port = port
         self._username = username
