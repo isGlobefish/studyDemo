@@ -1,0 +1,7 @@
+[2022-08-31 01:19:35,021]-[DEBUG]-[log.py]-[debug:45] : debug
+[2022-08-31 01:19:35,022]-[CRITICAL]-[log.py]-[critical:57] : 1111111111
+[2022-08-31 01:31:07,094]-[ERROR]-[log.py]-[exception:60] : Exception occurred
+Traceback (most recent call last):
+  File "/Users/dohozou/Desktop/Code/gitCode/test/pyScript.py", line 17, in <module>
+    c = a / b
+ZeroDivisionError: division by zero

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>string-list-dict</title>
+</head>
+<body>
+
+{{ string | upper}}
+
+<ul>
+    <li>{{ lists[0]}}</li>
+    <li>{{ lists[1]}}</li>
+    <li>{{ lists[2]}}</li>
+    <li>{{ lists[3]}}</li>
+
+    {% for list in lists %}
+    <li> list {{ list }}</li>
+    {% endfor %}
+
+    <b> # for list in lists </b>
+    </br>
+    <b> # endfor </b>
+</ul>
+
+
+<ol>
+    {% for list in lists %}
+    {% if list is odd %}
+    <li>{{ list }} is odd</li>
+    {% else %}
+    <li>{{ list }} is even</li>
+    {% endif %}
+    {% endfor %}
+</ol>
+
+<ol>
+    <li>{{ dict['name']}}</li>
+    <li>{{ dict['age']}}</li>
+</ol>
+
+</body>
+</html>

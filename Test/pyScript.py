@@ -39,8 +39,6 @@ print(Path.cwd().parent.parent)
 print(os.path.join(os.getcwd(), 'Config', 'requirements.txt'))
 print(Path.cwd().joinpath(*['Config', 'requirements.txt']))
 
-
-
 from loguru import logger
 
 logger.debug('123')
@@ -53,12 +51,29 @@ logger.debug("中文test")
 logger.error("中文test")
 logger.warning("中文test")
 
+from OperateUtil.operate_yaml import YamlUtil
 
+YamlUtil().read_yaml('/Users/dohozou/Desktop/Code/gitCode/Config/mysql.yaml')
 
+import os
 
+print(os.listdir(os.getcwd()))
 
+print(os.path.realpath(__file__))
 
+print(os.path.abspath('.'))
 
+print(os.path.abspath(os.path.realpath(__file__)))
 
+print(os.path.split(os.path.realpath(__file__)))
+
+print(os.path.join(os.getcwd(), 'Config', 'mysql.yaml'))
+
+print(os.system('pip3 list'))
+
+from tqdm import tqdm
+
+for i in tqdm(range(10000000)):
+    temp = ['你好'] * 2000
 
 
