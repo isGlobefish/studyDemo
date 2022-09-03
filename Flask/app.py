@@ -7,7 +7,7 @@ IDE       : PyCharm
 CreateTime: 2022-09-01 00:08:02
 '''
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, Response
 
 app = Flask(__name__)
 
@@ -111,6 +111,143 @@ from Flask.products import products
 # 注册蓝图
 app.register_blueprint(news.blueprint)
 app.register_blueprint(products.blueprint)
+
+# 标准类视图
+from flask import views
+from flask.typing import ResponseReturnValue
+
+
+class view_test1(views.View):
+
+    def dispatch_request(self) -> ResponseReturnValue:
+        return 'hello 视图标准类'
+
+
+class view_test2(views.View):
+
+    def dispatch_request(self) -> ResponseReturnValue:
+        return {"msg": "success", "code": 0}
+
+    @staticmethod
+    def as_view(name, **kwargs):
+        view = view_test2()
+        return view.dispatch_request
+
+
+# 将路由规则 / 和视图类 view_test 进行绑定
+app.add_url_rule(rule='/view1', view_func=view_test1.as_view('view1'))
+app.add_url_rule(rule="/view2", view_func=view_test2.as_view("view2"))
+
+# 继承视图类
+from Flask.viewclass.baseview import BaseView
+
+
+class UserView(BaseView):
+
+    def get_template(self):
+        return 'userview.html'
+
+    def get_data(self):
+        return {
+            'name': '邹德豪',
+            'gender': '男',
+            'age': 18
+        }
+
+
+app.add_url_rule('/userview', view_func=UserView.as_view('UserView'))
+
+from flask import Flask, request, views
+from functools import wraps
+
+
+# 定义修饰器
+def check_login(original_function):
+    @wraps(original_function)
+    def decorator_function(*args, **kwargs):
+        user = request.args.get('user')
+        if user and user == 'zhangsan':
+            return original_function(*args, **kwargs)
+        else:
+            return '请先登录！！！'
+
+    return decorator_function
+
+
+@app.route('/decorator')
+@check_login
+def decorator():
+    return '修饰器'
+
+
+class Decorator(views.View):
+    decorators = [check_login]
+
+    def dispatch_request(self) -> ResponseReturnValue:
+        return '修饰器在视图类中使用'
+
+
+app.add_url_rule('/decorator_view', view_func=Decorator.as_view('decorator_view'))
+
+
+# 获取 cookie
+@app.route('/get_cookie')
+def get_cooke():
+    cookie = request.cookies.get('poloyy')
+    return render_template('get_cookie.html', cookie=cookie)
+
+
+# 设置 cookie
+@app.route('/set_cookie')
+def set_cooke():
+    html = render_template('js_cookie.html')
+    response = Response(html)
+    response.set_cookie('poloyy', 'https://www.cnblogs.com/poloyy')
+    return response
+
+
+# 删除 cookie
+@app.route("/del_cookie")
+def del_cookie():
+    html = render_template("js_cookie.html")
+    response = Response(html)
+    response.delete_cookie("poloyy")
+    return response
+
+
+from flask import session
+import os
+
+app.config['SECRET_KEY'] = os.urandom(24)
+
+
+# 设置 session
+@app.route('/set_session')
+def set_session():
+    session['user'] = 'poloyy'
+    session['pwd'] = 'passwoed'
+    return render_template('session_query.html', user=session.get('user'), pwd=session.get('pwd'))
+
+
+# 获取 session
+@app.route('/get_session')
+def get_session():
+    return render_template('session_query.html', user=session.get('user'), pwd=session.get('pwd'))
+
+
+# 删除 session
+@app.route('/del_session')
+def del_session():
+    session.pop('user')
+    return render_template('session_query.html', user=session.get('user'), pwd=session.get('pwd'))
+
+
+# 清空 session
+@app.route('/clear_session')
+def clear_session():
+    session.clear()
+    return render_template('session_query.html', user=session.get('user'), pwd=session.get('pwd'))
+
 
 if __name__ == '__main__':
     # 默认主机: 127.0.0.1 端口: 5000

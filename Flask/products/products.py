@@ -9,7 +9,7 @@ CreateTime: 2022-09-02 02:32:44
 
 from flask import Blueprint
 
-blueprint = Blueprint("products", __name__, url_prefix="/product")
+blueprint = Blueprint("products", __name__, url_prefix="/products", template_folder='templates', static_folder='static')
 
 
 @blueprint.route("/car")
