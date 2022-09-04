@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>学习html, 实习web3.0, 进军元宇宙</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        textarea {
+            width: 200px;
+            height: 200px;
+            /*resize: none;*/
+            /*resize: vertical;*/
+            resize: horizontal;
+        }
+
+        #select {
+            height: 100px;
+            width: 60px;
+        }
+
+        #form{
+            background: gold;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="first_html" style="background: chartreuse"><span
+        style="width: 100px; height: 100px;color: aquamarine; display: block; text-align: center"><b
+        style="background: burlywood">爱你哦</b></span></div>
+
+
+<a href="http://www.baidu.com" target="_blank">百度一下</a>
+
+</br>
+
+<table border="1" width="100px">
+    <thead>22222222222</thead>
+    <tr>
+        <th>qqqqqq</th>
+        <th>zzzzzz</th>
+    </tr>
+    <tr>
+        <td>111111</td>
+        <td>222222</td>
+    </tr>
+    <tr>
+        <td>111111</td>
+        <td>222222</td>
+    </tr>
+</table>
+
+
+</br>
+
+<!--circle square disc-->
+<ul type="circle">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+</ul>
+
+</br>
+<ol type="I">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+</ol>
+
+</br>
+
+<dl>
+    <dt>Coffee</dt>
+    <dd>Black hot drink</dd>
+    <dt>Milk</dt>
+    <dd>White cold drink</dd>
+</dl>
+
+</br>
+
+<form action="http://www.baidu.com" method="get" autocomplete="off" id="form">
+    <!--method  默认get-->
+    <!--action 规定当前提交表单向何处发送表单数据-->
+    <!--autocomplete自动完成，on输入框会提示  off输入框不会提示-->
+    帐号：<input type="text" name="user" placeholder="请输入你的帐号"><br/>
+    密码：<input type="password" name="psd" placeholder="请输入你的密码" required><br/>
+    性别（单选框）：
+    <input type="radio" name="gender" value="1">男
+    <input type="radio" name="gender" value="2">女
+    <input type="radio" name="gender" value="3">保密<br/>
+    兴趣（多选框）：
+    <input type="checkbox" name="hobby" id="sing" value="1">
+    <label for="sing">唱歌</label>
+    <input type="checkbox" name="hobby" value="2" checked>跳舞
+    <input type="checkbox" name="hobby" value="3" disabled>看书
+    <input type="checkbox" name="hobby" value="4">运动<br/>
+    下拉框：
+    <select name="select" id="select" size="2">
+        <!--size规定下拉列表中可见选项的数目-->
+        <!--selected 规定在select里面默认展示第几项-->
+        <option value="1">北京</option>
+        <option value="2" selected>上海</option>
+        <option value="3" disabled>广州</option>
+        <option value="4">深圳</option>
+        <option value="5">武汉</option>
+        <option value="6">杭州</option>
+    </select><br/>
+    文本框：
+    <textarea name="text" id="text"></textarea><br/>
+    <input type="submit" value="提交">
+    <input type="button" value="注册"> <!--给js操作-->
+    <input type="reset" value="重置">
+</form>
+
+</body>
+</html>
+

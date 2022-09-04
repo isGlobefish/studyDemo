@@ -51,7 +51,7 @@ logger.debug("中文test")
 logger.error("中文test")
 logger.warning("中文test")
 
-from OperateUtil.operate_yaml import YamlUtil
+from Util.operate_yaml import YamlUtil
 
 YamlUtil().read_yaml('/Users/dohozou/Desktop/Code/gitCode/Config/mysql.yaml')
 

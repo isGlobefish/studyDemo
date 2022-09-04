@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+
+    <!--    <style>-->
+    <!--        * {-->
+    <!--            margin: 0;-->
+    <!--            padding: 0;-->
+    <!--        }-->
+
+    <!--        #box {-->
+    <!--            height: 100px;-->
+    <!--            width: 100px;-->
+    <!--            background: gold;-->
+    <!--        }-->
+
+    <!--    </style>-->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            width: 400px;
+            height: 200px;
+            line-height: 200px;
+            text-align: center;
+            border: 1px solid red;
+            margin: 50px auto;
+            font-size: 13px;
+            background: burlywood;
+        }
+
+        span {
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="box">
+    <p>
+        404, 此页面找不到, 页面将在<span id="timer">400s</span>后跳转到<a href="http://www.baidu.com" target="_blank" id="baidu">百度首页</a>
+    </p>
+</div>
+<!--<div>222222</div>-->
+
+<!--<div id="box">1111111</div>-->
+
+<!--<a href="http://wwww.baidu.com" id="lian" class="lian" target="_blank" xiaopeng="xiaopeng"></a>-->
+
+<!--<ul>-->
+<!--    <li>0</li>-->
+<!--    <li>1</li>-->
+<!--    <li>2</li>-->
+<!--    <li>3</li>-->
+<!--    <li>4</li>-->
+<!--</ul>-->
+
+<script>
+    // window.onload = function () {
+    //     document.write("<b><em>我是新增的内容哦</em></b>")
+    // };
+    /*
+    所谓事件，是指 JavaScript 捕获到用户的操作，并做出正确的响应。
+    在事件函数里面，有一个关键字this，代表当前触发事件的这个元素
+    事件：用户的操作
+    元素.事件 = 函数；
+    鼠标事件：
+        左键单击 onclick
+        左键双击 ondblclick
+        鼠标移入 onmouseover/onmouseenter ***
+        鼠标移出 onmouseout/onmouseleave ***
+    */
+
+    // var Box = document.getElementById('box')
+    // Box.onclick = function () {
+    //     console.log("我被点击了");
+    //     this.innerHTML = "嘻嘻";
+    //     alert("哈哈");
+    // };
+    // Box.onmouseenter = function () {
+    //     console.log("我被移入了");
+    // };
+    // Box.onmouseleave = function () {
+    //     console.log("我被移出了");
+    // };
+    //
+    // Box.style['margin-left'] = '150px';
+
+    // var a, b, c;
+    // a = 1;
+    // b = 2;
+    // c = 3;
+    //
+    // alert(a + b + c);
+    //
+    // var link = document.getElementById('lian')
+    // alert(link.href)
+    // alert(link.getAttribute('href'))
+    // link.setAttribute('xiaopo', '123333')
+    // link.removeAttribute('xiaopo')
+    // alert(link.getAttribute('xiaopo'))
+
+
+    // for (var i = 0; i < 10; i++) {
+    //     if (i === 5) {
+    //         continue;
+    //     }
+    //     console.log(i)
+    // }
+
+    // var uli = document.getElementsByTagName('li')
+    // var uli_length = uli.length
+    // for (var i = 0; i < uli_length; i++) {
+    //     uli[i].index = i;
+    //     uli[i].onclick = function () {
+    //         alert(this.index)
+    //     }
+    // }
+    // ;
+
+    // var j = 20;
+
+    // do {
+    //     console.log(i);
+    //     i++;
+    // } while (i < j)
+
+    // while (i < j) {
+    //     console.log(i);
+    //     i++;
+    // }
+
+
+    // var name = '小吴';
+    //
+    // switch (name) {
+    //     case "小吴":
+    //         alert(name + '好漂亮');
+    //         break;
+    //     case "小邹":
+    //         alert(name + '好漂亮');
+    //         break;
+    //     default:
+    //         alert('你是谁？')
+    //         break;
+    // }
+
+
+    // sum(1, 2, 3, 4, 5, 6, 7, 8);
+    //
+    // function sum() {
+    //     var x = 0;
+    //     for (var i = 0; i < arguments.length; i++) {
+    //         x += arguments[i];
+    //     }
+    //     alert(x);
+    // };
+
+    // var str = 'i am unstopable'
+    // console.log(str.toUpperCase())
+    // console.log(str.toLowerCase())
+    //
+    // var arr = new Array();
+    // arr[0] = 'un'
+    // arr[1] = 'stop'
+    // arr[2] = 'able'
+    // console.log(arr)
+
+    // var data = new Date();
+    //
+    // var year = data.getFullYear();
+    // var month = data.getMonth() + 1;
+    // var date = data.getDate();
+    // var hour = data.getHours();
+    // var minute = data.getMinutes();
+    // var second = data.getSeconds();
+    // var day = data.getDay();
+    // var millisecond = data.getMilliseconds();
+    //
+    // document.body.innerHTML = year + "年" + month + "月" + date + "日" + hour + "时" + minute + "分" + second + "秒" + millisecond + '毫秒' + "星期" + day;
+    //
+    // /*JSON字符串解析js对象*/
+    // var obj1 = '{"name": "xiaopo","sex": "woman","age": "18"}';
+    // var obj2 = JSON.parse(obj1);
+    // console.log(obj1);
+    // console.log(typeof obj1);
+    // console.log(obj2);
+    // console.log(typeof obj2);
+
+    // var obj = {"name": "unstopable", "age": 18};
+    // for (key in obj){
+    //     console.log(key, obj[key])
+    // }
+
+    // setInterval(function () {
+    //     console.log(2)
+    // }, 200)
+
+    var timer = document.getElementById("timer");
+    var baidu = document.getElementById('baidu')
+    var num = 400;
+    var time;
+    time = setInterval(function () {
+        num--;
+        timer.innerHTML = num + "s";
+        if (num === 0) {
+            clearInterval(time);
+            window.location.href = "http://www.baidu.com";
+        }
+        ;
+        baidu.onclick = function () {
+            num = 10;
+        }
+    }, 1000)
+
+</script>
+
+</body>
+</html>
