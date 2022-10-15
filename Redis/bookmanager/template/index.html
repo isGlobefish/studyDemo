@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<!--<a href="#">这是啥 {{ name}}</a>-->
+
+<ul>
+    {% for book in books %}
+    <li>{{ book.name }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
