@@ -49,17 +49,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 组册自定义中间件
+    'book.middleware.simple_middleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # 'BACKEND': 'django.template.backends.django.DjangoTemplates', # 默认引擎
+        # 'BACKEND': 'django.template.backends.jinja2.Jinja2', # 修改为Jinja2模板
+        'BACKEND': 'book.jinja2_env.environment', # 指定jinja2模板
         #  设置模版路径
         'DIRS': [Path.joinpath(BASE_DIR, 'template')],
         'APP_DIRS': True,
         'OPTIONS': {
+            # 'environment': 'jinja2.Environment', # 默认的
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
