@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     # path 第一个参数 正则 r 转义 ^ 严格开头 $ 严格结尾
     path('admin/', admin.site.urls),
-    path('book/', include('book.urls')),
+    path('book/', include('book.urls', namespace='book')),
 ]
