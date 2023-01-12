@@ -157,7 +157,7 @@ Z0Z = pymysql.connect(
     charset='utf8'
 )
 cursorZZ = Z0Z.cursor()
-executeZZ = "SELECT MAX(`日期`) FROM liaocheng_sale_fact WHERE `公司`='中智'"
+executeZZ = "SELECT MAX(`日期`) FROM liaocheng_sale_fact WHERE `公司`='中智Code'"
 cursorZZ.execute(executeZZ)
 timeStr = cursorZZ.fetchall()
 nearestTime = (str(timeStr).split(',')[0][-4:] + "-" + str(timeStr).split(',')[1] + "-" + str(timeStr).split(',')[
@@ -186,7 +186,7 @@ for iMonth in missMonthZZ:
                                   db='liaochengfenxi',  # 数据库名
                                   charset='utf8')  # 字符串类型
         cursorZZ1 = connZZ1.cursor()
-        executeDelCodeZZ1 = "DELETE FROM `liaocheng_sale_fact` WHERE `公司`='中智' AND YEAR(`日期`)='" + YearZZ + "' AND MONTH(`日期`)='" + MonthZZ + "'"
+        executeDelCodeZZ1 = "DELETE FROM `liaocheng_sale_fact` WHERE `公司`='中智Code' AND YEAR(`日期`)='" + YearZZ + "' AND MONTH(`日期`)='" + MonthZZ + "'"
         cursorZZ1.execute(executeDelCodeZZ1)
         delRowNumZZ1 = cursorZZ1.rowcount
         connZZ1.commit()  # 提交确认
@@ -194,7 +194,7 @@ for iMonth in missMonthZZ:
         connZZ1.close()  # 关闭连接
         delEndTime = datetime.datetime.now()
         cprint(
-            "【liaocheng_sale_fact库】中智" + YearZZ + "年" + MonthZZ + "月份删除旧数据" + str(delRowNumZZ1) + "行; 耗时:" + strftime(
+            "【liaocheng_sale_fact库】中智Code" + YearZZ + "年" + MonthZZ + "月份删除旧数据" + str(delRowNumZZ1) + "行; 耗时:" + strftime(
                 "%H:%M:%S", gmtime((delEndTime - delStartTime).seconds)), 'cyan', attrs=['bold', 'reverse', 'blink'])
 
         # 获取【dkh库】下v_sale_test
@@ -218,12 +218,12 @@ for iMonth in missMonthZZ:
         cursorZZ2.close()  # 关闭光标
         connZZ2.close()  # 关闭连接
         endGetDataTime = datetime.datetime.now()
-        cprint("【dkh库】中智" + YearZZ + "年" + MonthZZ + "月份获取数据" + str(getRowNumZZ2) + "行; 耗时：" + strftime(
+        cprint("【dkh库】中智Code" + YearZZ + "年" + MonthZZ + "月份获取数据" + str(getRowNumZZ2) + "行; 耗时：" + strftime(
             "%H:%M:%S", gmtime((endGetDataTime - startGetDataTime).seconds)), 'cyan',
                attrs=['bold', 'reverse', 'blink'])
         dataZZ = pd.DataFrame(dataZZ)
         dataZZ.columns = ['FINALTIME', 'FLAG_NAME', 'SALENO', 'MEMBERCARDNO', 'WARENAME', 'WAREQTY', 'STDAMT', 'NETAMT']
-        dfZZ = createDF()  # 中智
+        dfZZ = createDF()  # 中智Code
         dfZZ["日期"] = dataZZ["FINALTIME"]
         dfZZ["店名"] = dataZZ["FLAG_NAME"]
         dfZZ["销售单号"] = dataZZ["SALENO"]
@@ -232,11 +232,11 @@ for iMonth in missMonthZZ:
         dfZZ["销售数量"] = dataZZ["WAREQTY"]
         dfZZ["标准零售价"] = dataZZ["STDAMT"]
         dfZZ["销售金额"] = dataZZ["NETAMT"]
-        dfZZ["公司"] = "中智"
-        print("【liaochengfenxi库】中智" + YearZZ + "年" + MonthZZ + "月份数据入库ing......")
+        dfZZ["公司"] = "中智Code"
+        print("【liaochengfenxi库】中智Code" + YearZZ + "年" + MonthZZ + "月份数据入库ing......")
         uploadSQL(dfZZ, 'liaochengfenxi', 'liaocheng_sale_fact')  # 上传数据
         endTimeZZ = datetime.datetime.now()
-        cprint("【liaocheng_sale_fact库】中智" + YearZZ + "年" + MonthZZ + "月份删除旧数据" + str(delRowNumZZ1) + "行; 导入新数据" + str(
+        cprint("【liaocheng_sale_fact库】中智Code" + YearZZ + "年" + MonthZZ + "月份删除旧数据" + str(delRowNumZZ1) + "行; 导入新数据" + str(
             len(dfZZ)) + "行; 新增数据" + str(len(dfZZ) - delRowNumZZ1) + "行; 耗时：" + strftime("%H:%M:%S", gmtime(
             (endTimeZZ - startTimeZZ).seconds)), 'cyan', attrs=['bold', 'reverse', 'blink'])
     except Exception as e:

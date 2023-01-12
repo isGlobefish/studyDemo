@@ -84,7 +84,7 @@ except Exception as e:
 try:
     dataZZ = pd.read_csv('G:/dataZZ2020-10-19.csv', encoding='utf-8', header=0)
     # 获取中智数据库下quanyi_data
-    dfZZ = createDF()  # 中智
+    dfZZ = createDF()  # 中智Code
     dfZZ["日期"] = dataZZ["FINALTIME"]
     dfZZ["店名"] = dataZZ["FLAG_NAME"]
     dfZZ["销售单号"] = dataZZ["SALENO"]
@@ -93,7 +93,7 @@ try:
     dfZZ["销售数量"] = dataZZ["WAREQTY"]
     dfZZ["标准零售价"] = dataZZ["STDAMT"]
     dfZZ["销售金额"] = dataZZ["NETAMT"]
-    dfZZ["公司"] = "中智"
+    dfZZ["公司"] = "中智Code"
     maxRow = 1000000  # 每次上传数据量
     excelNum = math.ceil(len(dfZZ) / maxRow)  # 需要上传次数
 except Exception as e:

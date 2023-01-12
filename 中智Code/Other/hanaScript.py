@@ -77,7 +77,7 @@ connHANA = pymysql.connect(
     charset='utf8'
 )
 cursorHANA = connHANA.cursor()
-executeHANA = "SELECT MAX(`日期`) FROM liaocheng_sale_fact WHERE `公司`='中智'"
+executeHANA = "SELECT MAX(`日期`) FROM liaocheng_sale_fact WHERE `公司`='中智Code'"
 cursorHANA.execute(executeHANA)
 timeStr = cursorHANA.fetchall()
 nearestTime = str(timeStr)[20:32].replace(",", "-").replace(" ", "")
@@ -190,7 +190,7 @@ res2 = res.copy()
 #
 # print((firstDate + relativedelta(months=1)).strftime("%Y-%m"))
 #
-# # 全亿 and 中智
+# # 全亿 and 中智Code
 # import time
 # import datetime
 # import calendar
@@ -212,7 +212,7 @@ res2 = res.copy()
 # )
 # cursorZZ = Z0Z.cursor()
 # toYear = datetime.datetime.now().strftime("%Y")  # 本年
-# executeZZ = "SELECT `日期` FROM liaocheng_sale_fact WHERE `公司`='中智'AND YEAR(`日期`)='" + toYear + "'"  # 年初注意要修改
+# executeZZ = "SELECT `日期` FROM liaocheng_sale_fact WHERE `公司`='中智Code'AND YEAR(`日期`)='" + toYear + "'"  # 年初注意要修改
 # cursorZZ.execute(executeZZ)
 # nearestTimeZZ = max(cursorZZ.fetchall())[0]  # 最晚日期
 # Z0Z.commit()  # 提交确认

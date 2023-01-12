@@ -92,7 +92,7 @@ dfQY["销售金额"] = dataQY["销售金额"]
 dfQY["公司"] = "全亿"
 # '销售日期', '门店名称', '小票号', '物料描述', '销售数量', '销售金额'
 
-dfZZ = createDF()  # 中智
+dfZZ = createDF()  # 中智Code
 dfZZ["日期"] = dataZZ["FINALTIME"]
 dfZZ["店名"] = dataZZ["FLAG_NAME"]
 dfZZ["销售单号"] = dataZZ["SALENO"]
@@ -101,7 +101,7 @@ dfZZ["品名"] = dataZZ["WARENAME"]
 dfZZ["销售数量"] = dataZZ["WAREQTY"]
 dfZZ["标准零售价"] = dataZZ["STDAMT"]
 dfZZ["销售金额"] = dataZZ["NETAMT"]
-dfZZ["公司"] = "中智"
+dfZZ["公司"] = "中智Code"
 # FINALTIME, FLAG_NAME, SALENO, MEMBERCARDNO, WARENAME, WAREQTY, STDAMT, NETAMT
 
 mergeTable = dfQY.append([dfZZ])  # 合并表格
