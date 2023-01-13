@@ -280,7 +280,6 @@ dfna.loc[:, "姓名"] = dfna["姓名"].fillna(method="ffill")
 # 保存数据
 dfna.to_excel(fpath + "notNa.xlsx", index=False)
 
-
 # 六、SettingWithCopyWarning报警
 import pandas as pd
 
@@ -302,17 +301,197 @@ weather.loc[condition, '温差'] = weather['最高温'] - weather['最低温']
 df_new = weather[condition].copy()
 df_new['wencha'] = df_new['最高温'] - df_new['最低温']
 
-# 七、数据排序
-weather.sort_values()
+# 七、数据排序默认升序Ture
+weather['最低温'].sort_values(ascending=False)  # series
+weather.sort_values(by='最低温', ascending=False)  # dataframe
+# 多列排序，分别指定排列方式
+weather.sort_values(by=['最低温', '风向'], ascending=[False, True])  # dataframe
+
+# 八、字符串处理
+'''
+在series属性上调用函数
+只能在字符串列上使用，不能在数字列上使用
+Dataframe上没有str属性和处理方法
+Series.str并不是python的原生字符串，而是自己的一套方法，不过大部分和原生str相似
+'''
+weather['级别'].astype('str').str.isnumeric()
+weather['级别'].astype('str').str.len()
+weather['级别'].astype('str').str.startswith('2023-02')
+weather['日期'].astype('str').str.replace('-', '')[0:]
+weather['日期'].str.replace('-', '').str.slice(0, 6)
+# 正则
+weather['日期'].str.replace('[年月日]', '')
+weather['日期'].str.extract(r'(\d{4}\d{2}\d{2})', expand=False)
+
+# 九、axis参数，指定那个参数，那个要动起来原则
+'''
+0: index cross rows
+1: columns cross columns
+'''
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(
+    np.arange(12).reshape(3, 4),
+    columns=["A", "B", "C", "D"]
+)
+
+# 9.1 单列drop, 删除列
+df.drop("A", axis=1)
+
+# 删除行
+df.drop(1, axis=0)
+
+df.mean(axis=0)
+df.mean(axis=1)
+
+# 十、索引index的用途
+df.count()
+df.set_index("A", inplace=True, drop=False)
+# 查询A=4的数据
+df.loc[df["A"] == 4, :]
+df.loc[4]  # 通过索引搜索性能快
+
+'''
+索引是否递增
+Datafrme.index.is_monotonic_increasing
+索引是否唯一
+Datafrme.index.is_unique
+
+魔法函数-计时
+%timeit dataframe.loc[index]
+'''
+
+# index数据自动对齐
+s1 = pd.Series([1, 2, 3], index=list("abc"))
+s2 = pd.Series([1, 2, 3], index=list("bcd"))
+s1 + s2
+
+'''
+Categoricallindex，基于分类数据的index，提升性能等
+MultiIndex，对维索引，用于groupby对维聚合后结果等
+DatetimeIndex，时间类型索引，强大的日期和时间的方法支持；
+'''
+
+# 十一、Merge语法
+df.merge()
+
+# 十二、Concat语法
+pd.concat(['dataframe', 'dataframe'], ignore_index=True, axis=0)
+pd.concat(['dataframe', 'series', 'series'], ignore_index=True, axis=1)
+
+# 忽略报警
+import warnings
+
+warnings.filterwarnings('ignore')
+
+# append语法
+# dataframe.append(dataframe, ignore_index=True)
+
+# 低性能版本
+for i in range(5):
+    df = df.append({'A': i}, ignore_index=True)
+# 高性能版本
+pd.concat(
+    [pd.DataFrame([i], columns=['A']) for i in range(5)],
+    ignore_index=True
+)
+
+# 十三、excel的拆分与合并
+import os
+
+if not os.path.exists(fpath):
+    os.mkdir(fpath)
+
+# 数据结构dataframe.shape[0]
+# dataframe.iloc[begin:end]
+
+import os
+
+excel_names = []
+for excel_name in os.listdir(fpath):
+    excel_names.append(excel_name)
+
+# 十四、分组统计groupby
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+    'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+    'C': np.random.randn(8),
+    'D': np.random.randn(8)})
+
+# 统计所有数据列
+df.groupby('A').sum()
+df.groupby(['A', 'B']).mean()
+df.groupby(['A', 'B'], as_index=False).mean()  # 把AB索引列变成普通列
+
+# 同时查看多种数据统计
+df.groupby("A").agg([np.sum, np.mean, np.std])
+# 查看单列结果
+df.groupby("A")['C'].agg([np.sum, np.mean, np.std])
+df.groupby("A").agg([np.sum, np.mean, np.std])['C']
+# 不同列使用不同的聚合
+df.groupby("A").agg({'C': np.sum, 'D': np.mean})
+
+# 获取分组get_group()
+
+# 十五、分层索引MultiIndex
+# unstack把二级索引变成列ser.unstack(),ser.reset_index()
+# stock.loc[(slice(None), ['2019-10-02', '2019-10-03']), :]
+
+# 十六、数据转换函数map、apply、applymap
+'''
+map：只能用于series
+apply：series、dataframe
+applymap：只能dataframe
+'''
+# 实例：将股票代码英文转换成中文
+stock = pd.DataFrame({
+    '日期': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04'],
+    '公司': ['ALI', 'BD', 'JD', 'TX'],
+})
+
+dict_company_names = {
+    "bd": "百度",
+    "ali": "阿里",
+    "jd": "京东",
+    "tx": "腾讯"
+}
+
+# 方法1：Series.map(dict)
+stock['公司中文1'] = stock['公司'].str.lower().map(dict_company_names)
+# 方法2：Series.map(function)
+stock['公司中文2'] = stock['公司'].str.lower().map(lambda x: dict_company_names[x.lower()])
+
+stock['公司中文3'] = stock['公司'].str.lower().apply(lambda x: dict_company_names[x.lower()])
+stock['公司中文4'] = stock.apply(lambda x: dict_company_names[x['公司'].lower()], axis=1)
+
+# Dataframe.applymap()
+stock.loc[:, ['收盘', '开盘', '高']] = stock.applymap(lambda x: int(x))
+
+# 十七、每个分组应用apply函数
+df.groupby().apply(lambda x: int(x), topn=2).head()
+
+# 十八、stack和pivot实现数据透视
+stock.pivot()
+
+# 十九、apply同时添加多列
+import pandas as pd
+
+fpath = '/Users/dohozou/Desktop/Code/gitCode/Pandas/dataFiles/'
+weather = pd.read_excel(fpath + 'weather_xlsx.xlsx', sheet_name=0)
+weather.head()
+# 替换温度后面的文本
+weather['最低温'] = weather['最低温'].map(lambda x: int(str(x).replace('"C', "")))
+weather['最高温'] = weather['最高温'].map(lambda x: int(str(x).replace('"C', "")))
+weather.head()
 
 
+# 同时添加多列
+def my_func(row):
+    return row["最高温"] - row["最低温"], (row["最高温"] - row["最低温"]) / 2
 
 
-
-
-
-
-
-
-
-
+weather[["wencha", "avg"]] = weather.apply(my_func, axis=1, result_type="expand")
