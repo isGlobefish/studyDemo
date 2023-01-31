@@ -6,6 +6,8 @@ FileName  : 百度面试test.py
 IDE       : PyCharm
 CreateTime: 2023-01-12 10:51:36
 '''
+import dataclasses
+
 import pandas as pd
 
 data = {
@@ -44,3 +46,26 @@ purchase_df = df7.loc[~df7['采购单号'].isin(['出库单', '库存调整']), 
 
 # 题目7
 df8['员工代码'] = df8['商品名称'].str.extract(r'(g\d{1}[a-zA-Z]{2,3})', expand=False).str.strip()
+
+"""
+@dataclass
+"""
+
+from dataclasses import dataclass, field
+import dataclasses
+
+
+@dataclass(frozen=True, order=True)
+class Message:
+    id: int
+    text1: str = 'zoudehao'
+    text2: str = field(default='zoudehao')
+    replies:list[int] = field(default_factory=list, repr=False, hash=False)
+
+
+msg = Message(1, 'aaaaa')
+print(msg)
+print(dataclasses.astuple(msg))
+print(dataclasses.asdict(msg))
+copy = dataclasses.replace(msg, id=3)
+print(copy)
