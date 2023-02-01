@@ -2,7 +2,7 @@
 逝者如斯夫, 不舍昼夜 -- 孔夫子
 @Auhor    : Dohoo Zou
 Project   : gitCode
-FileName  : 01_readFiles.py
+FileName  : pd_learn.py
 IDE       : PyCharm
 CreateTime: 2022-11-26 18:11:26
 '''
@@ -809,21 +809,76 @@ pd.concat(
 # -------------------------------------------
 import os
 
+# 检查是否存在文件 不存在创建
 if not os.path.exists(fpath):
     os.mkdir(fpath)
 
 # 数据结构dataframe.shape[0]
 # dataframe.iloc[begin:end]
 
-import os
-
 excel_names = []
 for excel_name in os.listdir(fpath):
     excel_names.append(excel_name)
 
+# 13.1 合并多个表格 多表头加header=1
+合并表 = pd.DataFrame()
+for file_name in os.listdir(fpath):
+    表格 = pd.read_excel(fpath + file_name)
+    合并表 = pd.concat([合并表, 表格])
+
+# 13.2 合并多个子页
+df = pd.read_excel(fpath, None)  # 可以读取全部子页的数据
+df.keys()  # 可以获取子页的名称
+合并表 = pd.DataFrame()
+Sheets = list(df.keys())
+for sheet in Sheets:
+    sheet_data = df[sheet]
+    合并表 = pd.concat([合并表, sheet_data])
+
+# 13.3 表格拆分
+# 现存数据表格式是无法更改的对于pandas，但是可以清除
+import pandas.io.formats.excel
+
+pandas.io.formats.excel.header_style = None
+
+# 规范步骤
+write = pd.ExcelWriter(fpath + '拆分数据.xlsx')
+df.to_excel(write, '工作表名')
+write.save()
+write.close()
+
+# 拆分为多个工作表
+df = pd.read_excel(fpath + '带拆分表.xlsx')
+Col_Names = list(df['部门'].drop_duplicates())
+new_data = pd.ExcelWriter(fpath + '新表格.xlsx')
+for col in Col_Names:
+    data1 = df[df['部门'] == i]
+    data1.to_excel(new_data, sheet_name=i)
+new_data.save()
+new_data.close()
+
+# 拆分为多个工作簿
+df = pd.read_excel(fpath + '带拆分表.xlsx')
+Col_Names = list(df['部门'].drop_duplicates())
+for col in Col_Names:
+    data1 = df[df['部门'] == i]
+    data1.to_excel(fpath + col + '.xlsx')
+
 # -------------------------------------------
-# 十四、分组统计groupby
+# 十四、分组统计(分组聚合)groupby
 # -------------------------------------------
+'''
+# 常用分组聚合函数
+count      分组中非NA值的数量
+sum        非NA值的和
+mean       非NA值的平均值
+median     非NA值的算术中位数
+std var    无偏（分母为n-1）标准差和方差
+min max    非NA值的最小值和最大值
+prod       非NA的积
+first last 第一个和最后一个非NA值
+'''
+
 import pandas as pd
 import numpy as np
 
@@ -833,9 +888,14 @@ df = pd.DataFrame({
     'C': np.random.randn(8),
     'D': np.random.randn(8)})
 
-# 统计所有数据列
+# 14.1 分组聚合指定列及方法
+df.groupby(['A', 'B'])[['C']].sum()
+df.groupby(['A', 'B'])[['C', 'D']].sum()
+
+# 14.2 统计所有数据列
 df.groupby('A').sum()
 df.groupby(['A', 'B']).mean()
+# 百度面试涉及
 df.groupby(['A', 'B'], as_index=False).mean()  # 把AB索引列变成普通列
 
 # 同时查看多种数据统计
@@ -843,8 +903,46 @@ df.groupby("A").agg([np.sum, np.mean, np.std])
 # 查看单列结果
 df.groupby("A")['C'].agg([np.sum, np.mean, np.std])
 df.groupby("A").agg([np.sum, np.mean, np.std])['C']
-# 不同列使用不同的聚合
+# 14.3 不同列使用不同的聚合方法
 df.groupby("A").agg({'C': np.sum, 'D': np.mean})
+
+字典 = {'1月': 'count', '2月': sum, '3月': max, '4月': 'mean'}
+df.groupby('店名').agg(字典)
+
+# 读取文件设置index_col='店名'
+对应关系 = {'1月': '一季度', '2月': '一季度', '3月': '一季度', '4月': '二季度'}
+df.groupby(对应关系, axis=1).sum()
+
+# 以名字长度分组
+df.groupby(len).sum()
+S1 = ['北京', '北京', '北京', '北京', '天津', '天津']
+df.groupby([len, S1]).sum()
+
+# 多层索引
+L1 = ['1季度', '1季度', '1季度', '2季度', '2季度']
+L2 = ['1月', '2月', '3月', '4月', '5月']
+multindex = pd.MultiIndex.from_arrays([L1, L2], names=['季度', '月份'])
+df1 = pd.DataFrame(df, columns=multindex)
+df2 = df1.groupby(level='季度', axis=1).sum()
+
+# 按照奇偶行分组
+df.groupby(df.index % 2 == 0)[['语文', '数学', '英语']].sum()
+
+# 按照第一个字符或者姓氏分组
+df.groupby(df.姓名.str[0])[['语文', '数学', '英语']].sum()
+df.groupby([df.姓名.str[0], df.姓名.str[1]])[['语文', '数学', '英语']].sum()
+
+# 选定某些班级进行分组
+df.groupby(df.班级.isin(['1班', '2班']))[['语文', '数学', '英语']].sum()
+# 非~
+df.groupby(~df.班级.isin(['1班', '2班']))[['语文', '数学', '英语']].sum()
+
+# 按日期小时分组
+# year month day hour
+df.groupby([df.时间.dt.year, df.时间.dt.month])[['语文', '数学', '英语']].sum()
+
+# pipe
+df.pipe(pd.DataFrame.groupby, '班级').sum()
 
 # 获取分组get_group()
 
@@ -918,16 +1016,45 @@ dict_company_names = {
     "tx": "腾讯"
 }
 
+# 16.1 map()
 # 方法1：Series.map(dict)
 stock['公司中文1'] = stock['公司'].str.lower().map(dict_company_names)
+字典 = {'男': '先生', '女': '女士'}
+df['性别'].map(字典)
 # 方法2：Series.map(function)
 stock['公司中文2'] = stock['公司'].str.lower().map(lambda x: dict_company_names[x.lower()])
 
+# 16.2 apply()
 stock['公司中文3'] = stock['公司'].str.lower().apply(lambda x: dict_company_names[x.lower()])
 stock['公司中文4'] = stock.apply(lambda x: dict_company_names[x['公司'].lower()], axis=1)
 
+
+# 给语文科目都加五分
+def add_score(score, add_score):
+    return score + add_score
+
+
+df['语文'] = df['语文'].apply(add_score, args=(5,))
+
+# 就算语文 数学 英语的总计
+df[['语文', '数学', '英语']].apply(sum, axis=0)
+
+
+# bmi
+def BMI(data):
+    hight = data['身高']
+    weight = data['体重']
+    BMI = hight / weight ** 2
+    return BMI
+
+
+df['BMI'] = df.apply(BMI, axis=1)
+
+# 16.3 applymap()
 # Dataframe.applymap()
 stock.loc[:, ['收盘', '开盘', '高']] = stock.applymap(lambda x: int(x))
+
+df.applymap(lambda x: "%.3f" % x)
 
 # -------------------------------------------
 # 十七、每个分组应用apply函数
@@ -937,7 +1064,66 @@ df.groupby().apply(lambda x: int(x), topn=2).head()
 # -------------------------------------------
 # 十八、stack和pivot实现数据透视
 # -------------------------------------------
-stock.pivot()
+import pandas as pd
+import numpy as np
+from datetime import datetime
+
+df = pd.DataFrame({
+    '日期': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-02-01', '2022-02-02', '2022-03-01', '2022-03-02'],
+    '部门': ['人事', '销售', '人事', '销售', '推销', '销售', '人事', '推销'],
+    '人员': ['小红', '小美', '小红', '小明', '小小', '小翠', '小金', '小吴'],
+    '区域': ['山东', '山西', '山东', '上海', '北京', '广西', '四川', '广东'],
+    '成本': np.random.randn(8),
+    '数量': np.random.randn(8),
+    '金额': np.random.randn(8)})
+
+# 18.1 多条件分组考虑数据透视表pivot_table()
+'''
+pivot_table参数
+第一个参数：数据集
+index：以那列进行合并透视
+values：保留运算的列
+columns：每个values列增加一个指定列
+aggfunc：每个列的运算规则，sum/np.sum len np.mean,python自带不需要引号引起来
+fill_value=0 替换缺失值
+dropna=True 不含所有条目均为Na的列（默认False）
+margins=True 添加行/列小计和总计（默认False）
+'''
+pd.pivot_table(df, index=['部门', '人员'], values=['数量', '金额'], columns='区域', aggfunc=[np.sum, np.mean])
+
+# 18.2 交叉表crosstab()
+df['日期'] = df['日期'].astype('datetime64')  # 把字符串日期列变成日期列
+# df['日期'] = pd.to_datetime(df['日期'])
+# df['日期'] = datetime.strptime(df['日期'], '%Y-%m-%d')
+pd.crosstab([df.日期.dt.month, df.区域], df.部门, margins=True)
+
+# 18.3 pivot()和pivot_table()透视表差异不大
+df.pivot(columns='部门')
+
+# -------------------------------------------
+# 十八、和vlookup一样的功能（新）
+# -------------------------------------------
+df = pd.DataFrame({
+    '学号': [1, 2, 3, 4, 5],
+    '姓名': ['张三', '李四', '王五', '赵六', '邓七'],
+    '班级': ['1班', '1班', '2班', '2班', '3班']
+})
+
+dff = pd.DataFrame({
+    '学号': [1, 2, 3, 4, 5],
+    '语文': np.random.random(size=5),
+    '数学': np.random.random(size=5),
+    '英语': np.random.random(size=5),
+    '总分': dff['语文'] + dff['数学'] + dff['英语']
+})
+
+# vlookup一样的效果
+result = pd.merge(df, dff.loc[:, ['学号', '总分']], how='left', on='学号')
+
+# 把总分放在前面
+score_sum = result.总分
+result = result.drop('总分', axis=1)
+result.insert(0, '总分', score_sum)
 
 # -------------------------------------------
 # 十九、apply同时添加多列
@@ -989,3 +1175,26 @@ pd.value_counts(result)
 # 等平分箱
 year = [1992, 1983, 1922, 1932, 1973, 1999, 1993, 1995]
 result = pd.qcut(year, q=4)
+
+# -------------------------------------------
+# 二十二、数据转置、同环比计算
+# -------------------------------------------
+# 转置
+pd.DataFrame(df.values.T, index=df.columns, columns=df.index)
+
+# 环比
+上月 = df.销售金额.shift()
+环比 = df.销售金额 - 上月
+
+
+def 公式(新数据):
+    新数据['环比'] = 新数据.金额 - 新数据.金额.shift()
+    return 新数据
+
+
+df.sort_values(['城市', '月份']).groupby('城市').apply(公式)
+
+# 同比
+年 = df['日期'].dt.year
+数据 = pd.pivot_table(df, index='店号', columns=年, aggfunc='sum')
+数据['同比'] = (数据[2019] - 数据[2018]) / 数据[2018]
