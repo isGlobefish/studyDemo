@@ -897,6 +897,10 @@ df.groupby('A').sum()
 df.groupby(['A', 'B']).mean()
 # 百度面试涉及
 df.groupby(['A', 'B'], as_index=False).mean()  # 把AB索引列变成普通列
+'''
+把索引变成普通列的方法
+Dataframe.reset_index()
+'''
 
 # 同时查看多种数据统计
 df.groupby("A").agg([np.sum, np.mean, np.std])
@@ -951,6 +955,10 @@ df.pipe(pd.DataFrame.groupby, '班级').sum()
 # -------------------------------------------
 # 分层索引MultiIndex
 # unstack()把二级索引变成列ser.unstack(),ser.reset_index()
+'''
+stack()：从列到行堆叠
+unstack()：从行到列取消堆叠
+'''
 # stack()把列变成二级索引
 # stock.loc[(slice(None), ['2019-10-02', '2019-10-03']), :]
 import pandas as pd
